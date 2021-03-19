@@ -18,12 +18,19 @@ using CodeMonkey.Utils;
 
 public class GameHandler : MonoBehaviour {
 
+[SerializeField] private Snake snake;
+private LevelGrid levelGrid;
     private void Start() {
         Debug.Log("GameHandler.Start");
 
-        GameObject snakeHeadGameObject = new GameObject();
+        levelGrid=new LevelGrid(20,20);
+
+        snake.Setup(levelGrid);
+
+        levelGrid.Setup(snake);
+       /* GameObject snakeHeadGameObject = new GameObject();
         SpriteRenderer snakeSpriteRenderer = snakeHeadGameObject.AddComponent<SpriteRenderer>();
-        snakeSpriteRenderer.sprite = GameAssets.i.snakeHeadSprite;
+        snakeSpriteRenderer.sprite = GameAssets.i.snakeHeadSprite;*/
     }
 
 }
