@@ -32,17 +32,19 @@ public LevelGrid(int width, int height)
 this.width=width;
 this.height=height;
 
+}
+
+public void Setup(Snake snake)
+{
+this.snake=snake;
 SpawnFood();
 }
 
-/*public void Setup(Snake snake)
-{
-this.snake=snake;
-}*/
-
  private void SpawnFood()
     {
-      foodGridPosition=new Vector2Int(Random.Range(0,width),Random.Range(0,height));
+        do{
+            foodGridPosition=new Vector2Int(Random.Range(0,width),Random.Range(0,height));
+          }while(snake.GetGridPosition()==foodGridPosition);
 
       foodGameObject= new GameObject("FoodApple",typeof(SpriteRenderer));
 

@@ -27,7 +27,7 @@ private LevelGrid levelGrid;
 
         snake.Setup(levelGrid);
 
-        //levelGrid.Setup(snake);
+        levelGrid.Setup(snake);
        /* GameObject snakeHeadGameObject = new GameObject();
         SpriteRenderer snakeSpriteRenderer = snakeHeadGameObject.AddComponent<SpriteRenderer>();
         snakeSpriteRenderer.sprite = GameAssets.i.snakeHeadSprite;*/

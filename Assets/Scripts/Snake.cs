@@ -97,4 +97,9 @@ public class Snake : MonoBehaviour
      if(n<0) n+=360;
      return n;
    }
+
+   public Vector2Int GetGridPosition()
+   {
+return gridPosition;
+   }
 }
