@@ -12,7 +12,21 @@ public class LevelGrid
 private int width;
 private int height;
 
-private Snake snake;
+private Snake m_snake;
+
+
+
+public Snake snake
+{
+    get{
+        return m_snake; 
+       }
+    set{
+        m_snake=value;
+       }  
+}
+
+
 public LevelGrid(int width, int height)
 {
 this.width=width;
@@ -21,16 +35,16 @@ this.height=height;
 SpawnFood();
 }
 
-public void Setup(Snake snake)
+/*public void Setup(Snake snake)
 {
 this.snake=snake;
-}
+}*/
 
  private void SpawnFood()
     {
       foodGridPosition=new Vector2Int(Random.Range(0,width),Random.Range(0,height));
 
-      GameObject foodGameObject= new GameObject("FoodApple",typeof(SpriteRenderer));
+      foodGameObject= new GameObject("FoodApple",typeof(SpriteRenderer));
 
       foodGameObject.GetComponent<SpriteRenderer>().sprite=GameAssets.i.foodSprite;
       foodGameObject.transform.position=new Vector3(foodGridPosition.x,foodGridPosition.y);
