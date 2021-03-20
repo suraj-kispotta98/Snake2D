@@ -44,7 +44,7 @@ SpawnFood();
     {
         do{
             foodGridPosition=new Vector2Int(Random.Range(0,width),Random.Range(0,height));
-          }while(snake.GetGridPosition()==foodGridPosition);
+          }while(snake.GetFullSnakeGridPositionList().IndexOf(foodGridPosition)!=-1);
 
       foodGameObject= new GameObject("FoodApple",typeof(SpriteRenderer));
 
@@ -53,7 +53,7 @@ SpawnFood();
       Debug.Log("Food Spawned");
     }
 
-    public void SnakeMoved(Vector2Int snakeGridPosition)
+    public bool TrySnakeEatFood(Vector2Int snakeGridPosition)
     {
      if(snakeGridPosition==foodGridPosition)
      {
@@ -63,7 +63,10 @@ SpawnFood();
       
       Debug.Log("Food Destroyed");
       SpawnFood();
-      
+      return true;
      }
+     else{
+          return false;
+         }
     }
 }
