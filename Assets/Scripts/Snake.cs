@@ -23,173 +23,174 @@ public class Snake : MonoBehaviour
 
     public void Setup(LevelGrid levelGrid)
     {
-       this.levelGrid=levelGrid;
+        this.levelGrid = levelGrid;
     }
-   
-   private void Awake()
-   {
-       gridPosition=new Vector2Int(10,10);
-       gridMoveTimerMax=1f;
-       gridMoveTimer=gridMoveTimerMax;
-       gridMoveDirection=new Vector2Int(1,0);
-       
-       snakeMovePositionList=new List<Vector2Int>();
-       snakeBodySize=0;
 
-       snakeBodyPartList=new List<SnakeBodyPart>();
-   }
+    private void Awake()
+    {
+        gridPosition = new Vector2Int(10, 10);
+        gridMoveTimerMax = 1f;
+        gridMoveTimer = gridMoveTimerMax;
+        gridMoveDirection = new Vector2Int(1, 0);
 
-   private void Update()
-   {
-       HandleInput();
+        snakeMovePositionList = new List<Vector2Int>();
+        snakeBodySize = 0;
 
-       HandleGridMovement();
+        snakeBodyPartList = new List<SnakeBodyPart>();
+    }
 
-   }
+    private void Update()
+    {
+        HandleInput();
 
-//Keyboard Input Method()
-   private void HandleInput()
-   {
-     if(Input.GetKeyDown(KeyCode.UpArrow))
-       {
-           if(gridMoveDirection.y!=-1)
-           {
-           gridMoveDirection.x=0;
-           gridMoveDirection.y=+1;
-           }
-       }
+        HandleGridMovement();
 
-       if(Input.GetKeyDown(KeyCode.DownArrow))
-       {
-           if(gridMoveDirection.y!=+1)
-           {
-             gridMoveDirection.x=0;
-             gridMoveDirection.y=-1;
-           }
-       }
+    }
 
-       if(Input.GetKeyDown(KeyCode.LeftArrow))
-       {
-           if(gridMoveDirection.x!=+1)
-           {
-             gridMoveDirection.x=-1;
-             gridMoveDirection.y=0;
-           }
-       }
-
-       if(Input.GetKeyDown(KeyCode.RightArrow))
-       {
-            if(gridMoveDirection.x!=-1)
+    //Keyboard Input Method()
+    private void HandleInput()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (gridMoveDirection.y != -1)
             {
-             gridMoveDirection.x=+1;
-             gridMoveDirection.y=0;
+                gridMoveDirection.x = 0;
+                gridMoveDirection.y = +1;
             }
-       }
-   }
+        }
 
-//Method for Snake Movement
-   private void HandleGridMovement()
-   {
-     gridMoveTimer+=Time.deltaTime;
-    
-     if(gridMoveTimer>=gridMoveTimerMax)
-       {
-         gridMoveTimer-=gridMoveTimerMax;
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (gridMoveDirection.y != +1)
+            {
+                gridMoveDirection.x = 0;
+                gridMoveDirection.y = -1;
+            }
+        }
 
-         snakeMovePositionList.Insert(0,gridPosition);
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            if (gridMoveDirection.x != +1)
+            {
+                gridMoveDirection.x = -1;
+                gridMoveDirection.y = 0;
+            }
+        }
 
-         gridPosition+=gridMoveDirection;
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (gridMoveDirection.x != -1)
+            {
+                gridMoveDirection.x = +1;
+                gridMoveDirection.y = 0;
+            }
+        }
+    }
 
-         bool snakeAteFood=levelGrid.TrySnakeEatFood(gridPosition);
-         if(snakeAteFood)
-         {
-          // snakeatefood, grow body
-          snakeBodySize++;
-          CreateSnakeBodyPart();
+    //Method for Snake Movement
+    private void HandleGridMovement()
+    {
+        gridMoveTimer += Time.deltaTime;
 
-         }
+        if (gridMoveTimer >= gridMoveTimerMax)
+        {
+            gridMoveTimer -= gridMoveTimerMax;
 
-         if(snakeMovePositionList.Count>=snakeBodySize+1)
-         {
-           snakeMovePositionList.RemoveAt(snakeMovePositionList.Count-1);
-         }
+            snakeMovePositionList.Insert(0, gridPosition);
 
-        /* for(int i=0;i<snakeMovePositionList.Count;i++)
-         {
-           Vector2Int snakeMovePosition=snakeMovePositionList[i];
-           World_Sprite worldSprite=World_Sprite.Create(new Vector3(snakeMovePosition.x,snakeMovePosition.y),Vector3.one*.5f,Color.white);
-           FunctionTimer.Create(worldSprite.DestroySelf,gridMoveTimerMax);
-         }*/
-         transform.position=new Vector3(gridPosition.x,gridPosition.y);
-         transform.eulerAngles=new Vector3(0,0,GetAngleFromVector(gridMoveDirection)-90);
+            gridPosition += gridMoveDirection;
 
-         UpdateSnakeBodyParts();
+            bool snakeAteFood = levelGrid.TrySnakeEatFood(gridPosition);
+            if (snakeAteFood)
+            {
+                // snakeatefood, grow body
+                snakeBodySize++;
+                CreateSnakeBodyPart();
 
-         
-       }
-   }
+            }
 
-   /*private void CreateSnakeBody()
-   {
-     GameObject snakeBodyGameObject=new GameObject("Snake Body",typeof(SpriteRenderer));
-     snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite=GameAssets.i.snakeBodySprite;
+            if (snakeMovePositionList.Count >= snakeBodySize + 1)
+            {
+                snakeMovePositionList.RemoveAt(snakeMovePositionList.Count - 1);
+            }
 
-     snakeBodyTransformList.Add(snakeBodyGameObject.transform);
+            /* for(int i=0;i<snakeMovePositionList.Count;i++)
+             {
+               Vector2Int snakeMovePosition=snakeMovePositionList[i];
+               World_Sprite worldSprite=World_Sprite.Create(new Vector3(snakeMovePosition.x,snakeMovePosition.y),Vector3.one*.5f,Color.white);
+               FunctionTimer.Create(worldSprite.DestroySelf,gridMoveTimerMax);
+             }*/
+            transform.position = new Vector3(gridPosition.x, gridPosition.y);
+            transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector(gridMoveDirection) - 90);
 
-     snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder=-snakeBodyTransformList.Count;
-   } 
-*/
-   private void CreateSnakeBodyPart()
-   {
-     snakeBodyPartList.Add(new SnakeBodyPart(snakeBodyPartList.Count));
-   }
+            UpdateSnakeBodyParts();
 
-   private void UpdateSnakeBodyParts()
-   {
-     for(int i=0;i<snakeBodyPartList.Count;i++)
-         {
-           Vector3 snakeBodyPosition=new Vector3(snakeMovePositionList[i].x,snakeMovePositionList[i].y);
-           snakeBodyPartList[i].SetGridPosition(snakeMovePositionList[i]);
+        }
 
-         }
-   }
-   private float GetAngleFromVector(Vector2Int dir)
-   {
-     float n=Mathf.Atan2(dir.y,dir.x)*Mathf.Rad2Deg;
-     if(n<0) n+=360;
-     return n;
-   }
+    }
 
-   public Vector2Int GetGridPosition()
-   {
-return gridPosition;
-   }
-    
+    /*private void CreateSnakeBody()
+    {
+      GameObject snakeBodyGameObject=new GameObject("Snake Body",typeof(SpriteRenderer));
+      snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite=GameAssets.i.snakeBodySprite;
+
+      snakeBodyTransformList.Add(snakeBodyGameObject.transform);
+
+      snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder=-snakeBodyTransformList.Count;
+    } 
+ */
+    private void CreateSnakeBodyPart()
+    {
+        snakeBodyPartList.Add(new SnakeBodyPart(snakeBodyPartList.Count));
+    }
+
+    private void UpdateSnakeBodyParts()
+    {
+        for (int i = 0; i < snakeBodyPartList.Count; i++)
+        {
+            Vector3 snakeBodyPosition = new Vector3(snakeMovePositionList[i].x, snakeMovePositionList[i].y);
+            snakeBodyPartList[i].SetGridPosition(snakeMovePositionList[i]);
+
+        }
+    }
+    private float GetAngleFromVector(Vector2Int dir)
+    {
+        float n = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        if (n < 0) n += 360;
+        return n;
+    }
+
+    public Vector2Int GetGridPosition()
+    {
+        return gridPosition;
+    }
+
     //Return full list of position occupied by snake: head and body
-   public List<Vector2Int> GetFullSnakeGridPositionList()
-   {
-     List<Vector2Int> gridPositionList= new List<Vector2Int>() { gridPosition };
-     gridPositionList.AddRange(snakeMovePositionList);
-     return gridPositionList;
-   }
+    public List<Vector2Int> GetFullSnakeGridPositionList()
+    {
+        List<Vector2Int> gridPositionList = new List<Vector2Int>() { gridPosition };
+        gridPositionList.AddRange(snakeMovePositionList);
+        return gridPositionList;
+    }
 
-   private class SnakeBodyPart{
+    private class SnakeBodyPart
+    {
 
-     private Vector2Int gridPosition;
-     private Transform transform;
+        private Vector2Int gridPosition;
+        private Transform transform;
 
-     public SnakeBodyPart(int bodyIndex)
-     {
-       GameObject snakeBodyGameObject=new GameObject("Snake Body",typeof(SpriteRenderer));
-       snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite=GameAssets.i.snakeBodySprite;
-       snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder=-bodyIndex;
-       transform=snakeBodyGameObject.transform;
-     }
+        public SnakeBodyPart(int bodyIndex)
+        {
+            GameObject snakeBodyGameObject = new GameObject("Snake Body", typeof(SpriteRenderer));
+            snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite = GameAssets.i.snakeBodySprite;
+            snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder = -bodyIndex;
+            transform = snakeBodyGameObject.transform;
+        }
 
-     public void SetGridPosition(Vector2Int gridPosition)
-     {
-       this.gridPosition=gridPosition;
-       transform.position=new Vector3(gridPosition.x,gridPosition.y);
-     }
-   }
+        public void SetGridPosition(Vector2Int gridPosition)
+        {
+            this.gridPosition = gridPosition;
+            transform.position = new Vector3(gridPosition.x, gridPosition.y);
+        }
+    }
 }
