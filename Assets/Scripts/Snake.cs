@@ -14,6 +14,13 @@ public class Snake : MonoBehaviour
       Up,
       Down
     }
+
+    /*private enum State{
+
+      Alive,
+      Dead
+    }*/
+    //private State state;
     private Direction gridMoveDirection;
     private Vector2Int gridPosition;
     private float gridMoveTimer;
@@ -44,13 +51,26 @@ public class Snake : MonoBehaviour
        snakeBodySize=0;
 
        snakeBodyPartList=new List<SnakeBodyPart>();
+
+      // state=State.Alive;
    }
 
    private void Update()
    {
-       HandleInput();
+
+     /*switch(state)
+     {
+       case State.Alive:
+      
+       break;
+
+       case State.Dead:
+       break;
+     }*/
+      HandleInput();
 
        HandleGridMovement();
+       
 
    }
 
@@ -144,6 +164,17 @@ public class Snake : MonoBehaviour
            World_Sprite worldSprite=World_Sprite.Create(new Vector3(snakeMovePosition.x,snakeMovePosition.y),Vector3.one*.5f,Color.white);
            FunctionTimer.Create(worldSprite.DestroySelf,gridMoveTimerMax);
          }*/
+
+         foreach(SnakeBodyPart snakeBodyPart in snakeBodyPartList)
+         {
+           Vector2Int snakeBodyPartGridPosition=snakeBodyPart.GetGridPosition();
+           if(gridPosition==snakeBodyPartGridPosition)
+           {
+             // GameOver
+             Debug.Log("Game over");
+            // state=State.Dead;
+           }
+         }
          transform.position=new Vector3(gridPosition.x,gridPosition.y);
          transform.eulerAngles=new Vector3(0,0,GetAngleFromVector(gridMoveDirectionVector)-90);
 
@@ -173,7 +204,7 @@ public class Snake : MonoBehaviour
      for(int i=0;i<snakeBodyPartList.Count;i++)
          {
            //Vector3 snakeBodyPosition=new Vector3(snakeMovePositionList[i].x,snakeMovePositionList[i].y);
-           snakeBodyPartList[i].SetSnakeMovePosition(snakeMovePositionList[i]);
+           snakeBodyPartList[i].SetGridPosition(snakeMovePositionList[i].GetGridPosition());
 
          }
    }
@@ -215,6 +246,11 @@ return gridPosition;
        transform=snakeBodyGameObject.transform;
      }
 
+     public void SetGridPosition(Vector2Int gridPosition)
+     {
+      this.gridPosition=gridPosition;
+      transform.position=new Vector3(gridPosition.x,gridPosition.y);
+     }
      public void SetSnakeMovePosition(SnakeMovePosition snakeMovePosition)
      {
        this.snakeMovePosition=snakeMovePosition;
@@ -255,6 +291,11 @@ return gridPosition;
               break;
        }
        transform.eulerAngles=new Vector3(0,0,angle);
+     }
+
+     public Vector2Int GetGridPosition()
+     {
+       return snakeMovePosition.GetGridPosition();
      }
    }
 
